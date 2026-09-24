@@ -59,11 +59,5 @@ Changing the opponent or difficulty resets the scores.
 - Vanilla JavaScript (ES6)
 - Google Fonts (Bricolage Grotesque)
 
-## Notes
-
-The font loads from Google Fonts, so an internet connection is needed to see it. Without a connection, the game falls back to the system font and works normally.
-
-
-
-Your Name
-SkillCraft Technology, Web Development Internship
+##Demo link
+https://gaurikhamankar123-star.github.io/SCT_WD_3/
