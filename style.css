@@ -1,0 +1,299 @@
+:root {
+  --ink: #1c1b2b;
+  --panel: #2a2840;
+  --cell: #35324f;
+  --cell-hover: #423e64;
+  --cell-win: #47426e;
+  --chalk: #f3f0ff;
+  --muted: #a7a2c8;
+  --teal: #3ed6c0;
+  --amber: #ffb547;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+[hidden] { display: none !important; }
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 32px 20px;
+  background: var(--ink);
+  color: var(--chalk);
+  font-family: "Bricolage Grotesque", system-ui, -apple-system, "Segoe UI", sans-serif;
+  overflow-x: hidden;
+}
+
+/* Two big arcs in the corners, a quiet echo of the slide's curved shapes */
+body::before, body::after {
+  content: "";
+  position: fixed;
+  width: 520px;
+  height: 520px;
+  border-radius: 50%;
+  pointer-events: none;
+}
+body::before {
+  top: -280px;
+  left: -220px;
+  border: 60px solid rgba(62, 214, 192, 0.11);
+}
+body::after {
+  right: -260px;
+  bottom: -280px;
+  border: 60px solid rgba(255, 181, 71, 0.10);
+}
+
+.app {
+  position: relative;
+  z-index: 1;
+  width: min(1020px, 100%);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: clamp(32px, 7vw, 90px);
+}
+
+/* ---------- Intro and controls ---------- */
+
+h1 {
+  margin: 0 0 16px;
+  font-size: clamp(2.8rem, 7vw, 5rem);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+}
+
+.lede {
+  margin: 0 0 36px;
+  max-width: 34ch;
+  font-size: 1.1rem;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+.control { margin-bottom: 22px; }
+
+.control-title {
+  margin: 0 0 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.segmented {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 4px;
+  background: var(--panel);
+  border-radius: 999px;
+}
+
+.segmented button {
+  border: 0;
+  border-radius: 999px;
+  padding: 10px 18px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.segmented button:hover { color: var(--chalk); }
+
+.segmented button[aria-pressed="true"] {
+  background: var(--chalk);
+  color: var(--ink);
+}
+
+/* ---------- Scoreboard ---------- */
+
+.play { width: min(440px, 100%); justify-self: center; }
+
+.scoreboard {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1.2fr;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.score {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px 14px;
+  background: var(--panel);
+  border: 2px solid transparent;
+  border-radius: 18px;
+  transition: border-color 0.25s;
+}
+
+.score-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.score-value {
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+#score-X .score-name { color: var(--teal); }
+#score-O .score-name { color: var(--amber); }
+#score-X.active { border-color: var(--teal); }
+#score-O.active { border-color: var(--amber); }
+
+/* ---------- Board ---------- */
+
+.board {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  aspect-ratio: 1;
+  padding: 12px;
+  background: var(--panel);
+  border-radius: 30px;
+}
+
+.cell {
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 20px;
+  background: var(--cell);
+  cursor: pointer;
+  transition: background 0.15s, transform 0.15s, opacity 0.3s;
+}
+
+.cell:not([aria-disabled="true"]):hover {
+  background: var(--cell-hover);
+  transform: translateY(-2px);
+}
+
+.cell[aria-disabled="true"] { cursor: default; }
+
+.cell.win { background: var(--cell-win); }
+.board.finished .cell:not(.win) { opacity: 0.45; }
+
+.mark {
+  width: 60%;
+  height: 60%;
+  overflow: visible;
+}
+
+.mark path, .mark circle {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 10;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  animation: draw 0.32s ease-out both;
+}
+
+.mark path:nth-child(2) { animation-delay: 0.14s; }
+
+.mark.x { color: var(--teal); }
+.mark.o { color: var(--amber); }
+
+.win-line {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.win-line line {
+  stroke: var(--chalk);
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  opacity: 0.9;
+}
+
+.win-line line.draw { animation: draw 0.45s 0.2s ease-out both; }
+
+@keyframes draw {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+
+/* ---------- Status and actions ---------- */
+
+.status {
+  min-height: 1.6em;
+  margin: 20px 0;
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.btn {
+  padding: 12px 22px;
+  border-radius: 999px;
+  border: 2px solid var(--muted);
+  background: transparent;
+  color: var(--chalk);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s, background 0.2s;
+}
+
+.btn:hover { transform: translateY(-2px); }
+
+.btn.primary {
+  border-color: var(--teal);
+  background: var(--teal);
+  color: var(--ink);
+}
+
+/* ---------- Accessibility ---------- */
+
+button:focus-visible {
+  outline: 3px solid var(--chalk);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ---------- Small screens ---------- */
+
+@media (max-width: 820px) {
+  .app { grid-template-columns: 1fr; gap: 28px; }
+  .intro { text-align: center; }
+  .lede { margin: 0 auto 24px; }
+  .segmented { justify-content: center; }
+}
+
+@media (max-width: 420px) {
+  .scoreboard { gap: 6px; }
+  .score { padding: 10px; }
+  .score-value { font-size: 1.6rem; }
+  .board { gap: 8px; padding: 10px; border-radius: 24px; }
+  .cell { border-radius: 16px; }
+}

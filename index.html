@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tic-Tac-Toe</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app">
+
+    <section class="intro">
+      <h1>Tic-tac-toe</h1>
+      <p class="lede">Get three in a row before your opponent does. Play a friend on the same screen or take on the computer.</p>
+
+      <div class="control">
+        <p class="control-title" id="opponent-label">Opponent</p>
+        <div class="segmented" role="group" aria-labelledby="opponent-label" id="mode-group">
+          <button type="button" data-mode="pvp" aria-pressed="false">Two players</button>
+          <button type="button" data-mode="cpu" aria-pressed="true">Vs computer</button>
+        </div>
+      </div>
+
+      <div class="control" id="level-control">
+        <p class="control-title" id="level-label">Difficulty</p>
+        <div class="segmented" role="group" aria-labelledby="level-label" id="level-group">
+          <button type="button" data-level="easy" aria-pressed="false">Easy</button>
+          <button type="button" data-level="medium" aria-pressed="true">Medium</button>
+          <button type="button" data-level="hard" aria-pressed="false">Unbeatable</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="play" aria-label="Game">
+      <div class="scoreboard">
+        <div class="score" id="score-X" data-player="X">
+          <span class="score-name" id="name-X">You (X)</span>
+          <span class="score-value" id="value-X">0</span>
+        </div>
+        <div class="score" id="score-D">
+          <span class="score-name">Draws</span>
+          <span class="score-value" id="value-D">0</span>
+        </div>
+        <div class="score" id="score-O" data-player="O">
+          <span class="score-name" id="name-O">Computer (O)</span>
+          <span class="score-value" id="value-O">0</span>
+        </div>
+      </div>
+
+      <div class="board" id="board" role="group" aria-label="Tic-tac-toe board"></div>
+
+      <p class="status" id="status" role="status" aria-live="polite"></p>
+
+      <div class="actions">
+        <button type="button" class="btn primary" id="new-round">New round</button>
+        <button type="button" class="btn ghost" id="reset-scores">Reset scores</button>
+      </div>
+    </section>
+
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
